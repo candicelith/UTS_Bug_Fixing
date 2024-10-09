@@ -22,34 +22,42 @@ class MainActivity : AppCompatActivity() {
 //            Get Array
             val monthList = resources.getStringArray(R.array.month)
 
+
 //            Initiate
             var selectedTime ="${timePicker.hour}:${timePicker.minute}"
             val _tempCalendar : Calendar = Calendar.getInstance()
             _tempCalendar.timeInMillis = System.currentTimeMillis()
             var selectedDate = "${_tempCalendar.get(Calendar.DAY_OF_MONTH)} ${monthList[_tempCalendar.get(Calendar.MONTH)]} ${_tempCalendar.get(Calendar.YEAR)}"
-
+            var selectedKehadiran: String = ""
 
 //            Kehadiran Dropdown=======================================
-            val adapterKehadiran = ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_spinner_item,
-                kehadiranList
-            )
+            val kehadiranList = resources.getStringArray(R.array.kehadiran)
+            val adapterKehadiran = ArrayAdapter<String>(this@MainActivity, android.R.layout.simple_spinner_item, kehadiranList)
             kehadiranSpinner.adapter = adapterKehadiran
 
 //            Selected Kehadiran
             kehadiranSpinner.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
+                        selectedKehadiran = kehadiranList.get(position)
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
-
+                        TODO("Not yet implemented")
                     }
                 }
 
+            if (selectedKehadiran == "Hadir Tepat Waktu") {
+                keteranganEdittext.visibility = View.INVISIBLE
+            }
 
+            val selection = "Hadir Tepat Waktu"
+            val spinnerPosition: Int = adapterKehadiran.getPosition(selection)
+            kehadiranSpinner.setSelection(spinnerPosition)
+
+            submitButton.setOnClickListener {
+                Toast.makeText(this@MainActivity, "Presensi berhasil $selectedDate jam $selectedTime", Toast.LENGTH_SHORT).show()
+            }
 
         }
     }
